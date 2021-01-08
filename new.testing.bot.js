@@ -1,5 +1,5 @@
 const discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefix, token } = require('./bot_config.json');
 const client = new discord.Client();
 
 const server = client.guilds.cache.get('701142154474684507');
