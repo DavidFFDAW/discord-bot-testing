@@ -25,10 +25,41 @@ class Controller{
         if(command === 'add'){
             const splitted = message.content.split(' ')[1];
             if(splitted.includes(',')){
-                
+                this.service.addGroupOfItems(splitted);
+            } else {
+                this.service.addNewItem(splitted);
             }
-            this.service.addNewItem(splitted);
+            message.channel.send('Tu lista: '+this.service.toString(this.service.array));
+        }
+        else if(command === 'rand'){
+            const random = this.service.getRandomFromArray();
+            message.channel.send('El elemento obtenido es: '+random);
+        }
+        else if(command === 'remove'){
+            const position = parseInt(message.content.split(' ')[1],10);
+            this.service.removeItemByPosition(position);
             message.channel.send(this.service.toString(this.service.array));
+        }
+        else if(command === 'show'){
+            if(this.service.array.length === 0){
+                message.channel.send('La lista esta vacia (No hay Contenido)')
+            }
+            else{
+                const array = this.service.toString(this.service.array);
+                message.channel.send(array);
+            }
+        }
+        else if(command === 'reset'){
+            this.service.resetList();
+            message.channel.send('Se ha borrado la lista');
+        }
+        else if(command === 'save'){
+            if(this.service.array.length === 0){
+                message.channel.send('No se guardará un array vacío');
+            }
+        }
+        else if(command === 'load'){
+            message.channel.send('Se cargarán los datos...');
         }
     };
 

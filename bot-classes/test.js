@@ -1,12 +1,13 @@
-const Service = require('./service');
-const s = new Service();
-s.addNewItem('Pepe');
-s.addNewItem('Paco');
+/*const Service = require('./service');
+const serv = new Service();*/
 
-const palabras = 'cosa,array,pedo,marioneta';
-console.log(palabras.includes(','));
-const split = palabras.split(',');
-split.map(element => s.addNewItem(element));
+// remove certain position from array ↓
+let array = [1,2,3,4,5,6];
+            // we want to delete the 3.
 
-console.log(s.array);
-console.log(s.toString(s.array));
+removeItemByPosition = position => {
+    position = position - 1;
+    const before = array.slice(0,position);
+    const afterDeletePosition = array.slice(position + 1,array.length);
+    array = before.concat(afterDeletePosition);
+}
