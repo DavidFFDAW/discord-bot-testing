@@ -43,14 +43,11 @@ class FileEditor {
         });
     }
     overridingAddition = array => {
-        this.fileManager.clear();
-        array.forEach(element => {
-            if(element === array[0]){
-                this.fileManager.override(this.createNewItem(element.name,element.value));
-            } else {
-                this.fileManager.addWrite(this.createNewItem(element.name,element.value));
-            }
+        const mapped = array.map(element => {
+            element + '/-';
         });
+        console.log('mapped: ',mapped);
+        return mapped;
     };
 };
 
@@ -59,13 +56,17 @@ module.exports = FileEditor;
 const fileManager = require('./FileManager');
 const fileEditor = new FileEditor(fileManager);
 
-const deleteByName = name => {
-    fileEditor.tryDeletingByName(name)
-}
+const deleteByName = _ => {
+    fileManager.read().then(content => {
+        const array = fileEditor.parseToArrayOfObjects(content);
+        console.log('array: ',array)
+        return fileEditor.overridingAddition(array);
+    });
+};
 
 try{
     const content = ['squirttle','charmander','poliwrath'];
-    fileEditor.tryDeletingByName('list').then(array => fileEditor.overridingAddition(array));
+    console.log(deleteByName());
 } catch(err){
     console.log(err.message);
 }
