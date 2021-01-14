@@ -1,13 +1,14 @@
-/*const Service = require('./service');
-const serv = new Service();*/
 
-// remove certain position from array ↓
-let array = [1,2,3,4,5,6];
-            // we want to delete the 3.
-
-removeItemByPosition = position => {
-    position = position - 1;
-    const before = array.slice(0,position);
-    const afterDeletePosition = array.slice(position + 1,array.length);
-    array = before.concat(afterDeletePosition);
-}
+class Mierda{
+    constructor(){
+        this.array = [1,2,3];
+    }
+    add = item => this.array = [...this.array, item];
+    addGroup = items => items.split(',').forEach(item => this.add(item));
+};
+const caca = new Mierda();
+caca.add('c');
+caca.add('a');
+console.log(caca.array);
+console.log(caca.addGroup('cosa,de,prueba'));
+console.log(caca.array);

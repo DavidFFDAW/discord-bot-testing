@@ -1,0 +1,11 @@
+{
+    "commands": [
+        "add",
+        "show",
+        "save",
+        "load",
+        "remove",
+        "rand",
+        "reset"
+    ]
+}

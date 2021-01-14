@@ -3,9 +3,10 @@ class Service{
         this.array = [];
     }
     addNewItem = item => this.array = [...this.array,item];
-    addGroupOfItems = items => this.array = this.array.concat(items);
+    addGroupOfItems = items => items.split(',').forEach(item => this.addNewItem(item));
     getRandomFromArray = _ => this.array[Math.floor(Math.random() * this.array.length)];
     resetList = _ => this.array = [];
+    arrayLength = _ => this.array.length;
     removeItemByPosition = position => {
         position = position - 1;
         const before = this.array.slice(0,position);
@@ -13,16 +14,6 @@ class Service{
         this.array = before.concat(after);
     };
 
-    toString = array => {
-        let final = '[ ';
-        for(const item of array){
-            if(item === array[array.length - 1]){
-                final += `${item} ]`;
-                break;
-            }
-            final += `${item}, `;
-        }
-        return final;
-    };
+    toString = _ => this.array.toString();
 }
 module.exports = Service;
