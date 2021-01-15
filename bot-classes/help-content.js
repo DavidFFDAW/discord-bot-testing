@@ -12,19 +12,18 @@ ${pref}reset → borra el contenido de la lista, reiniciandola.`
 const files = `${pref}load [name] → carga la lista guardada con un cierto nombre.
 ${pref}save [name] → guarda la lista actual con el nombre que se indica.
 ${pref}resetfile → resetea el contenido del archivo, vaciandolo.
-${pref}showfile → muestra el contenido del archivo donde se almacenan las listas.`;
-
-const futureDev = `${pref}delete [name] → borrar la lista almacenada con el nombre indicado
-${pref}update [name] → edita la lista guardada con este nombre indicado`;
+${pref}showfile → muestra el contenido del archivo donde se almacenan las listas.
+${pref}delete [name] → borrar la lista almacenada con el nombre indicado
+${pref}update [name] → edita la lista guardada con este nombre indicado
+${pref}changename [oldname] [newname] → cambia el nombre por el que esta guardado en el archivo`;
 
 const helpContent = _ => {
     return new discord.MessageEmbed()
     .setColor('#22a1f0')
     .setTitle('MANIPULACION DE LISTAS')
     .setDescription('Lista de comandos soportados')
-    .addField('LOCAL',lists)
-    .addField('ARCHIVO',files)
-    .addField('DEV {}',futureDev)
+    .addField('LOCAL (Memoria)',lists)
+    .addField('REMOTE (Archivo)',files)
     .setAuthor('test-bot')
     .setTimestamp(new Date());
 };

@@ -1,3 +1,4 @@
+/* 
 const obj = [
     { name:'poncho',value:'hijoputa' },
     { name:'list',value:'papafrita' },
@@ -5,11 +6,27 @@ const obj = [
     { name:'morti',value:'apechusque' },
 ];
 
-const stringify = (object) => {
-    return object.map(element => create(element));
-}
-const create = ({ name,value }) => {
-    return `${name}: ${value}`;
+const update = (name,newValue) => {
+    const found = obj.find(element => element.name === name);
+    return (found.value = newValue) || 'No esite';
+};
+console.log(obj);
+console.log(update('put','cacafu'));
+console.log(obj);
+
+ */
+
+ const prntHello = _ => console.log('Hello');
+ const prntPuton = _ => console.log('Puton');
+class Test{
+    constructor(){
+
+    }
+    printThings = () => {
+        prntHello();
+        prntPuton();
+    }
 }
 
-console.log(stringify(obj).toString());
+const test = new Test();
+test.printThings();

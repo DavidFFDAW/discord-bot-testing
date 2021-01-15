@@ -16,7 +16,7 @@ class View{
         this.client.once('ready', _ => {
             this.channel = this.client.guilds.cache.get(this.env.serverID).channels.cache.get(this.env.channelID);
             console.log('Connected '+this.config.botName+' to the server');
-            this.client.user.setActivity('ONLINE!');
+            this.client.user.setActivity('Arrays');
             handler(this.channel);
         });
     };

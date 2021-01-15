@@ -3,12 +3,14 @@ class FileEditor {
         this.fileManager = fileManager;
         this.endLine = '/-';
     }
-    parseToArrayOfObjects = (fileContent) => {
-        return this.fileManager.cleanOutput(fileContent).split(this.endLine).map(element => {
-            const elementSplitted = element.split(': ');
-            const name = elementSplitted[0];
-            const value = elementSplitted[1];
-            return this.makingAnObject(elementSplitted,name,value);
+    getObjectFromFile = () => {
+        return this.fileManager.read().then(fileContent => {
+            return this.fileManager.cleanOutput(fileContent).split(this.endLine).map(element => {
+                const elementSplitted = element.split(': ');
+                const name = elementSplitted[0].replace(',','');
+                const value = elementSplitted[1];
+                return this.makingAnObject(elementSplitted,name,value);
+            });
         });
     };
     makingAnObject = (element,name,value) => {
@@ -17,56 +19,75 @@ class FileEditor {
             value: value
         }),{});
     };
-    createNewItem = (name,value) => {
-        return `${name}: ${value}`;
-    };
+    
+    destructuring = ({ name,value }) => `${name}: ${value}/-\n`;
+    destructuringWithout = ({ name,value }) => `${name}: ${value}`;
+
     throwError = (err) => {
         throw new Error(err);
     }
-    tryAddItemToFile = (name,value) => {
-        return this.fileManager.read().then(content => {
-            const isInArray = this.parseToArrayOfObjects(content).some(element => element.name === name);
-            return isInArray ? this.throwError('Ya se encuentra en el archivo') : this.fileManager.addWrite(this.createNewItem(name,value)).then(_ => 'Introducido con exito');
-        }).catch(this.throwError);
+    stringify = (array) => {
+        return array.map((element,_,array) => (element === array[array.length - 1]) ? this.destructuringWithout(element) : this.destructuring(element));
     };
-    tryFindingListByName = name => {
-        return this.fileManager.read().then((content) => {
-            const arrayOfObjects = this.parseToArrayOfObjects(content);
-            const foundOne = arrayOfObjects.find(element => element.name === name);
+    addNewItem = (name,value) => {
+        return this.getObjectFromFile().then(array => {
+            const isInArray = array.some(element => element.name === name);
+            const params = { name, value };
+            if(isInArray){
+                return this.throwError('ERROR : Ya esta añadido');
+            } else{
+                array.push(params);
+                return this.fileManager.override(this.stringify(array).toString()).then(_ => 'Done!');
+            }
+        });
+    };
+    findListByName = name => {
+        return this.getObjectFromFile().then(array => {
+            const foundOne = array.find(element => element.name === name);
             return typeof foundOne === undefined ? this.throwError('No se encuentra ninguna lista con dicho nombre') : foundOne.value;
-        }).catch(this.throwError);
-    }
-    tryDeletingByName = name => {
-        return this.fileManager.read().then(content => {
-            const lists = this.parseToArrayOfObjects(content);
-            return lists.filter(element => element.name !== name);
         });
     }
-    overridingAddition = array => {
-        const mapped = array.map(element => {
-            element + '/-';
+    deleteListByName = nameToSearch => {
+        return this.getObjectFromFile().then(array => {
+            if(array.some(element => element.name === nameToSearch)){
+                const filtered = array.filter(element => element.name !== nameToSearch);
+                return this.fileManager.override(this.stringify(filtered).toString()).then(_ => 'Done!');
+            }else{
+                this.throwError('ERROR: No se puede borrar un elemento que no exi');
+            }
+        })
+    }
+    updateListByName = (name,newValue) => {
+        return this.getObjectFromFile().then(array => {
+            array.find(element => element.name === name).value = newValue;
+            return this.fileManager.override(this.stringify(array).toString()).then(_ => 'Done!');
         });
-        console.log('mapped: ',mapped);
-        return mapped;
-    };
+    }
+    changeListNameByOldName = (oldname, newname) => {
+        return this.getObjectFromFile().then(array => {
+            if(array.some(el => el.name === oldname)){
+                array.find(el => el.name === oldname).name = newname;
+                return this.fileManager.override(this.stringify(array).toString()).then(_ => 'Done!');
+            } else {
+                this.throwError('ERROR: No existe esta lista en el archivo');
+            }
+        });
+    }
 };
 
 module.exports = FileEditor;
-
+/*
 const fileManager = require('./FileManager');
 const fileEditor = new FileEditor(fileManager);
 
-const deleteByName = _ => {
-    fileManager.read().then(content => {
-        const array = fileEditor.parseToArrayOfObjects(content);
-        console.log('array: ',array)
-        return fileEditor.overridingAddition(array);
-    });
-};
-
 try{
-    const content = ['squirttle','charmander','poliwrath'];
-    console.log(deleteByName());
-} catch(err){
+    const name = 'names';
+    const newValue = ['nuevoValorNew','nuevoValorNew2','updateNew'];
+    // WORKS: fileEditor.addNewItem(name, newValue).then(console.log).catch(err => console.log(err.message));
+    // WORKS: fileEditor.update(name,newValue).then(console.log).catch(err => console.log(err.message));
+    // WORKS: fileEditor.deleteListByName(name).then(console.log).catch(err => console.log(err.message));
+} 
+catch(err){
     console.log(err.message);
 }
+*/

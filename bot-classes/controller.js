@@ -23,6 +23,17 @@ class Controller{
         emoji.react(emoji).catch(error => channel.send(error));
     };
 
+    add = (message) => {
+        const splitted = message.content.split(' ')[1];
+        if(splitted.includes(',')){
+            this.service.addGroupOfItems(splitted);
+        } else {
+            this.service.addNewItem(splitted);
+        }
+        message.channel.send('Tu lista: '+this.service.toString());
+    }
+
+
     handlerMessageReceived = (message,command) => {
         if(command === 'help'){
             message.channel.send(help());
@@ -62,7 +73,7 @@ class Controller{
             const split = message.content.split(' ');
             if(split[1]){ // implica que se ha indicado un nombre
                 try{
-                    this.fileEditor.tryAddItemToFile(split[1],this.service.toString())
+                    this.fileEditor.addNewItem(split[1],this.service.toString())
                     .then(confirmation => message.channel.send(confirmation))
                     .catch(err => message.channel.send(err.message));
                 } catch(err){
@@ -75,7 +86,7 @@ class Controller{
         else if(command === 'load'){
             const split = message.content.split(' ');
             if(split[1]){
-                this.fileEditor.tryFindingListByName(split[1])
+                this.fileEditor.findListByName(split[1])
                 .then(value => {
                     this.service.resetList();
                     this.service.addGroupOfItems(value);
@@ -96,6 +107,33 @@ class Controller{
         else if(command === 'resetfile'){
             this.fileManager.override('').then(_ => message.channel.send('Se ha reseteado el archivo'))
             .catch(err => message.channel.send(err.message));
+        }
+        else if (command === 'update'){
+            const split = message.content.split(' ');
+            if(split[1]){
+                this.fileEditor.updateListByName(split[1],this.service.toString()).then(res => message.channel.send(res))
+                .catch(err => message.channel.send(err.message));
+            } else {
+                message.channel.send('No se ha introducido un nombre para modificar');
+            }
+        }
+        else if(command === 'delete'){
+            const split = message.content.split(' ');
+            if (split[1]){
+                this.fileEditor.deleteListByName(split[1]).then(res => message.channel.send(res))
+                .catch(err => message.channel.send(err.message));
+            } else {
+                message.channel.send('No se ha introducido un nombre para borrar');
+            }
+        }
+        else if(command === 'changename'){
+            const split = message.content.split(' ');
+            if(split[1] && split[2]){
+                this.fileEditor.changeListNameByOldName(split[1], split[2]).then(resp => message.channel.send(resp))
+                .catch(err => message.channel.send(err.message));
+            } else {
+                message.channel.send('No se ha introducido el comando de forma correcta');
+            }
         }
     };
 
