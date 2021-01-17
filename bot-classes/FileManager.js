@@ -1,5 +1,3 @@
-const file = './data.txt';
-
 class FileManager{
     constructor(file){
         this.fs = require('fs').promises;
@@ -21,5 +19,4 @@ class FileManager{
     cleanOutput = output => output.replace(/(\r\n|\n|\r)/gm,'');
     clean = out => out.replace(',','');
 }
-const instance = new FileManager(file);
-module.exports = instance;
+module.exports = FileManager;

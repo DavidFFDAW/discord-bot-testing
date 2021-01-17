@@ -1,3 +1,4 @@
 numbers: 1,2,3,4,5,6/-
 ,frutas: platano,manzana,pera/-
-,vowels: a,e,i,o,u
+,vowels: a,e,i,o,u/-
+,newnumbers: 1,8,1,4,0,2,4,6
