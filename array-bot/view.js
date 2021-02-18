@@ -1,8 +1,8 @@
 class View{
     constructor(){
         this.discord = require('discord.js');
-        this.config = require('../bot-config.json');
-        this.env = require('../environment.json');
+        this.config = require('./bot-config.json');
+        this.env = require('./environment.json');
         this.client = new this.discord.Client();
     }
 

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voices</title>
+</head>
+<body>
+    <select id="voices"></select>
+    <input type="text" id="inpt"/>
+    <button type="button" id="play">Hablar</button>
+
+    <script>
+        const inptMessage = document.getElementById('inpt');
+        const selection = document.getElementById('voices');
+        const btnplay = document.getElementById('play');
+        const speech = window.speechSynthesis;
+        
+        const printVoices = voicesArray => {
+            for(const elementVoice of voicesArray){
+                const option = document.createElement('option');
+                option.innerText = `${elementVoice.name} (${elementVoice.lang})`;
+                option.dataset.name = elementVoice.name;
+                option.dataset.lang = elementVoice.lang;
+                selection.appendChild(option);
+            }
+            selection.children[0].selected = true;
+        }
+
+        const getSelectedItemName = _ => selection[selection.selectedIndex].dataset.name;
+        const findItemByName = name => this.avalaibleVoices.find(el => el.name === name);
+        
+        window.addEventListener('load', e => {
+            console.log('Estoy cargando...');
+            this.avalaibleVoices = speech.getVoices();
+            console.log('Voces disponibles: ',avalaibleVoices);
+            printVoices(avalaibleVoices);
+        });
+        
+        btnplay.addEventListener('click', e => {
+            const synth = new SpeechSynthesisUtterance(inptMessage.value || 'No hay datos para decir');
+            const selectedVoiceName = getSelectedItemName();
+            const voiceFound = findItemByName(selectedVoiceName);
+            synth.voice = voiceFound;
+            synth.lang = voiceFound.lang;
+            synth.volume = 20;
+            speech.speak(synth);
+        });
+    </script>
+    
+</body>
+</html>

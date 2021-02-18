@@ -12,6 +12,8 @@
     "discord.js": "^12.5.1"
   },
   "dependencies": {
-    "fs": "0.0.1-security"
+    "dotenv": "^8.2.0",
+    "fs": "0.0.1-security",
+    "promise-mysql": "^5.0.2"
   }
 }
